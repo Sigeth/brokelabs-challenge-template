@@ -39,6 +39,21 @@ Each machine image is built from `images/<machine>/Dockerfile` and published wit
 
 `opslab challenge images .` lists the images and the ones the challenge builds. The workspace dev loop builds and loads them into the dev cluster.
 
+### Virtual machines (`runtime: vm`)
+
+A `vm` machine boots a KubeVirt containerDisk. Prefer an [opslab-images](https://github.com/Sigeth/opslab-images) base **as is** (e.g. `ghcr.io/sigeth/opslab-images/debian-13:<version>`) and break or prepare it in `setup` scripts: they run as root over SSH when the instance starts. Every challenge on the same base then shares one cached disk per node. The platform creates the users at boot: `student` (UID 1000, passwordless `sudo`) and `opslab-checker` (the checker's account: leave its `sudo` rule alone).
+
+Instances usually have no internet access, so a setup script cannot install packages. When the machine needs some, build your own image from a base with a recipe, `images/<machine>/image.yaml`:
+
+```yaml
+version: 0.1.0                                       # tag it like the challenge
+source:
+  image: ghcr.io/sigeth/opslab-images/debian-13:1.0.0
+run: [install.sh]                                    # run as root in the disk, with network access
+```
+
+[opslab-ci](https://github.com/Sigeth/opslab-ci) builds it (`dagger call vm-image --source=images/<machine>`). Each such image is a full copy of the disk, so keep it for when setup scripts are not enough. Any image meeting the base image contract works; check one with `opslab image test IMAGE`.
+
 ## Checks
 
 Each task has one check, evaluated **from outside** the student's machines:
