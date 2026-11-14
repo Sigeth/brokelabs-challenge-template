@@ -89,10 +89,18 @@ Try it on a local platform (the workspace dev cluster):
 opslab challenge manifest . | kubectl apply -f -   # install it, unsigned (development only)
 ```
 
-Coming next: `opslab challenge test` (checks fail, solution, checks pass), and `push --sign` to publish to a catalog.
+Publish it to a registry (push the machine images first):
+
+```sh
+opslab challenge build .     # writes dist/<name>-<version>, an OCI image layout
+opslab challenge push dist/my-challenge-0.1.0 ghcr.io/your-account/my-challenge
+```
+
+`build` pins every image by digest and fails if a tag cannot be resolved, so the package always starts the images it was built with. `solution/` is published next to the package as a separate artifact (an OCI referrer), never inside it. Registry credentials come from `docker login` or `podman login`.
+
+Coming next: `opslab challenge test` (checks fail, solution, checks pass), and signing for catalogs.
 
 Rules for publishing:
-- Pin every image by digest.
 - Bump `metadata.version` for every release.
 - Keep `solution/` working.
 
