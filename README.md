@@ -74,6 +74,7 @@ Good checks:
 - **Test behavior, not files.** "SSH as root is denied" beats "sshd_config contains PermitRootLogin no", because a student with root can fake a file but not a behavior.
 - **Fail closed.** If the student breaks the checker's access, the task fails. It never passes.
 - **One task, one idea**, with a title that says what "solved" means.
+- **Guard what must keep working.** A task true from the start that the student must not break ("you can still log in with your key") is a guard: `guard: true` and `points: 0`.
 
 Need logic beyond these? Set `spec.validation.checkerImage` to a custom checker image. The [opslab-checker SDK](https://github.com/Sigeth/opslab-checker) makes that a single Go function.
 
@@ -98,7 +99,15 @@ opslab challenge push dist/my-challenge-0.1.0 ghcr.io/your-account/my-challenge
 
 `build` pins every image by digest and fails if a tag cannot be resolved, so the package always starts the images it was built with. `solution/` is published next to the package as a separate artifact (an OCI referrer), never inside it. Registry credentials come from `docker login` or `podman login`.
 
-Coming next: `opslab challenge test` (checks fail, solution, checks pass), and signing for catalogs.
+Test it on a platform with the solution (the workspace dev cluster, or any cluster with opslab):
+
+```sh
+opslab challenge test .      # every task fails, the solution runs, every task passes
+```
+
+The solution is `solution/<machine>.sh` for each machine that has one, or `solution/solve.sh` on the first terminal machine. It runs with `sh` as the student, as if typed in the terminal (the student has `sudo` on `vm` machines). Guards must pass before and after it.
+
+Sign what you publish, with a key (`opslab challenge sign --key`) or, in CI, keyless (`--keyless`), and list your packages in a catalog with `opslab catalog index`.
 
 Rules for publishing:
 - Bump `metadata.version` for every release.
