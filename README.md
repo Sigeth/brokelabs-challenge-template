@@ -33,8 +33,8 @@ Only `pod` runs today; the other runtimes come with later platform versions.
 
 Each machine image is built from `images/<machine>/Dockerfile` and published with the challenge. Students see how it is built, so make it an example of good practice:
 
-- **An unprivileged user and group of its own:** `student`, UID/GID 1000, with a home directory and no extra groups. End with `USER 1000:1000`. Never rely on `root`, or on a distribution's default user that belongs to `sudo` or `adm`.
-- **Only the tools the challenge needs.** Start from a small base (`alpine`, `busybox`, a `-slim` image) and add packages one by one. No `sudo`, `systemd`/`systemctl`, compilers or editors the tasks do not use: every extra binary is attack surface, and a distraction.
+- **Start from an [opslab-images](https://github.com/Sigeth/opslab-images) container base:** `ghcr.io/sigeth/opslab-images/alpine-3.24` (busybox shell) or `debian-13-slim` (bash). It brings the unprivileged `student` user and group (UID/GID 1000, a home directory, no extra groups) and runs as `USER 1000:1000`. Switch to `USER root` only to install packages, end with `drop-package-manager` (nothing is installed at run time), and come back to `USER 1000:1000`. Never rely on `root`, or on a distribution's default user that belongs to `sudo` or `adm`.
+- **Only the tools the challenge needs.** Add packages one by one. No `sudo`, `systemd`/`systemctl`, compilers or editors the tasks do not use: every extra binary is attack surface, and a distraction.
 - **Pin the base image by digest**, and tag the machine image with the challenge version.
 
 `opslab challenge images .` lists the images and the ones the challenge builds. The workspace dev loop builds and loads them into the dev cluster.
