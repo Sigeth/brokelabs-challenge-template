@@ -1,5 +1,5 @@
 #!/bin/sh
-# Reference solution: `opslab challenge test` runs it to check that the tasks
+# Reference solution: `brokelabs challenge test` runs it to check that the tasks
 # can be solved (all checks fail before, pass after). Published separately,
 # for teachers only.
 set -eu

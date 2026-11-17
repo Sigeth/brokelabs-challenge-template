@@ -1,8 +1,8 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/Sigeth/opslab-core-go/v0.1.0/schema/challenge-package.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Sigeth/brokelabs-core-go/v0.1.0/schema/challenge-package.schema.json
 #
 # Template challenge: replace every value. Reference of every field:
-# https://github.com/Sigeth/opslab-core-go/tree/main/api/v1alpha1/challengepackage_types.go
-apiVersion: opslab.io/v1alpha1
+# https://github.com/Sigeth/brokelabs-core-go/tree/main/api/v1alpha1/challengepackage_types.go
+apiVersion: brokelabs.io/v1alpha1
 kind: ChallengePackage
 metadata:
   name: my-challenge # lowercase letters, digits and '-'
