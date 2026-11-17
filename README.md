@@ -33,7 +33,7 @@ Only `pod` runs today; the other runtimes come with later platform versions.
 
 Each machine image is built from `images/<machine>/Dockerfile` and published with the challenge. Students see how it is built, so make it an example of good practice:
 
-- **Start from an [brokelabs-images](https://github.com/Sigeth/brokelabs-images) container base:** `ghcr.io/sigeth/brokelabs-images/alpine-3.24` (busybox shell) or `debian-13-slim` (bash). It brings the unprivileged `student` user and group (UID/GID 1000, a home directory, no extra groups) and runs as `USER 1000:1000`. Switch to `USER root` only to install packages, end with `drop-package-manager` (nothing is installed at run time), and come back to `USER 1000:1000`. Never rely on `root`, or on a distribution's default user that belongs to `sudo` or `adm`.
+- **Start from a [brokelabs-images](https://github.com/Sigeth/brokelabs-images) container base:** `ghcr.io/sigeth/brokelabs-images/alpine-3.24` (busybox shell) or `debian-13-slim` (bash). It brings the unprivileged `student` user and group (UID/GID 1000, a home directory, no extra groups) and runs as `USER 1000:1000`. Switch to `USER root` only to install packages, end with `drop-package-manager` (nothing is installed at run time), and come back to `USER 1000:1000`. Never rely on `root`, or on a distribution's default user that belongs to `sudo` or `adm`.
 - **Only the tools the challenge needs.** Add packages one by one. No `sudo`, `systemd`/`systemctl`, compilers or editors the tasks do not use: every extra binary is attack surface, and a distraction.
 - **Pin the base image by digest**, and tag the machine image with the challenge version.
 
@@ -41,14 +41,14 @@ Each machine image is built from `images/<machine>/Dockerfile` and published wit
 
 ### Virtual machines (`runtime: vm`)
 
-A `vm` machine boots a KubeVirt containerDisk. Prefer an [brokelabs-images](https://github.com/Sigeth/brokelabs-images) base **as is** (e.g. `ghcr.io/sigeth/brokelabs-images/debian-13:<version>`) and break or prepare it in `setup` scripts: they run as root over SSH when the instance starts. Every challenge on the same base then shares one cached disk per node. The platform creates the users at boot: `student` (UID 1000, passwordless `sudo`) and `brokelabs-checker` (the checker's account: leave its `sudo` rule alone).
+A `vm` machine boots a KubeVirt containerDisk. Prefer a [brokelabs-images](https://github.com/Sigeth/brokelabs-images) base **as is** (e.g. `ghcr.io/sigeth/brokelabs-images/debian-13:<version>`) and break or prepare it in `setup` scripts: they run as root over SSH when the instance starts. Every challenge on the same base then shares one cached disk per node. The platform creates the users at boot: `student` (UID 1000, passwordless `sudo`) and `brokelabs-checker` (the checker's account: leave its `sudo` rule alone).
 
 Instances usually have no internet access, so a setup script cannot install packages. When the machine needs some, build your own image from a base with a recipe, `images/<machine>/image.yaml`:
 
 ```yaml
 version: 0.1.0                                       # tag it like the challenge
 source:
-  image: ghcr.io/sigeth/brokelabs-images/debian-13:1.0.0
+  image: ghcr.io/sigeth/brokelabs-images/debian-13:1.0.1
 run: [install.sh]                                    # run as root in the disk, with network access
 ```
 
