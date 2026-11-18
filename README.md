@@ -21,7 +21,7 @@ Pick the lightest runtime that can host the challenge. The cluster admin sees wh
 | Runtime | What the student gets | Use it for |
 |---|---|---|
 | `pod` | A container, no privileges | Files, permissions, config, app debugging |
-| `userns` | Root in a container, mapped to an unprivileged user on the host | Packages, users and sudo, file ownership, services (no systemd) |
+| `userns` | A container running as root, mapped to an unprivileged user on the host; the terminal opens as `student` (`sudo` if the image installs it), setup and checks run as root | Packages, users and sudo, file ownership, services (no systemd) |
 | `vcluster` | Admin of a virtual Kubernetes cluster | RBAC, NetworkPolicy, Pod Security, workloads |
 | `vm` | A full virtual machine (KubeVirt) | Kernel, firewall, sshd, auditd, systemd, Docker or Podman, container escapes, kubeadm |
 
