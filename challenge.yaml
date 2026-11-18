@@ -21,7 +21,7 @@ spec:
 
   machines:
     - name: box
-      runtime: pod # pod | sysbox | vcluster | vm
+      runtime: pod # pod | userns | vcluster | vm
       # Built from images/box/Dockerfile: a minimal image whose unprivileged
       # "student" user (1000:1000) is the one pod machines run as.
       image: ghcr.io/your-account/my-challenge/box:0.1.0

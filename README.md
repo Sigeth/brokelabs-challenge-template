@@ -21,11 +21,11 @@ Pick the lightest runtime that can host the challenge. The cluster admin sees wh
 | Runtime | What the student gets | Use it for |
 |---|---|---|
 | `pod` | A container, no privileges | Files, permissions, config, app debugging |
-| `sysbox` | A system container with systemd, Docker or Podman inside | Services, container engines |
+| `userns` | Root in a container, mapped to an unprivileged user on the host | Packages, users and sudo, file ownership, services (no systemd) |
 | `vcluster` | Admin of a virtual Kubernetes cluster | RBAC, NetworkPolicy, Pod Security, workloads |
-| `vm` | A full virtual machine (KubeVirt) | Kernel, firewall, sshd, auditd, container escapes, kubeadm |
+| `vm` | A full virtual machine (KubeVirt) | Kernel, firewall, sshd, auditd, systemd, Docker or Podman, container escapes, kubeadm |
 
-Only `pod` runs today; the other runtimes come with later platform versions.
+`pod` and `vm` run today; `userns` and `vcluster` come with the next platform versions.
 
 **`pod` machines** run as UID/GID 1000 without any privilege (Pod Security "restricted"): no root, no `sudo`, no package installs. `setup/` scripts and checks run as that user too. The container gets a TTY, so an image whose default command is a shell stays up; services can be started in the background by a setup script.
 
