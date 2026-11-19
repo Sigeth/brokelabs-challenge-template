@@ -25,7 +25,7 @@ Pick the lightest runtime that can host the challenge. The cluster admin sees wh
 | `vcluster` | Admin of a virtual Kubernetes cluster | RBAC, NetworkPolicy, Pod Security, workloads |
 | `vm` | A full virtual machine (KubeVirt) | Kernel, firewall, sshd, auditd, systemd, Docker or Podman, container escapes, kubeadm |
 
-`pod` and `vm` run today; `userns` and `vcluster` come with the next platform versions.
+All four run since chart 0.6.0. `userns` and `vcluster` need Kubernetes 1.36 or later. A `vcluster` challenge usually pairs the virtual cluster with a `pod` workstation on the brokelabs-images `workstation-k8s` image, with `kubeconfigFor` pointing at the cluster machine.
 
 **`pod` machines** run as UID/GID 1000 without any privilege (Pod Security "restricted"): no root, no `sudo`, no package installs. `setup/` scripts and checks run as that user too. The container gets a TTY, so an image whose default command is a shell stays up; services can be started in the background by a setup script.
 
